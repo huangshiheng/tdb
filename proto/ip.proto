@@ -1,0 +1,11 @@
+syntax='proto2';
+package tdb.proto;
+
+message IP {
+    required string ip   = 1;
+    required uint32 port = 2;
+}
+
+message Host {
+    repeated IP ip_port = 1;
+}

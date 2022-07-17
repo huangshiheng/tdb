@@ -1,0 +1,54 @@
+syntax='proto2';
+package tdb.proto;
+
+enum RequestType {
+	INSERT = 0;
+	DELETE = 1;
+	FIND   = 2;
+	VOTE   = 3;
+	SENDLOG= 4;
+	HEART  = 5;
+	LEADER = 6;
+}
+
+enmu ResponseType {
+	ResponseOK     = 1;
+	ResponseFailed = 2;
+}
+
+message KV {
+	required bytes key = 1;
+	optional bytes val = 2;
+}
+
+message TkvRequest {
+	required RequestType type = 1;
+	required KV kv = 2;	
+}
+
+message TkvResponse {
+	required ResponseType type = 1;
+}
+
+message ClusterVote {
+	required uint32 term = 1;
+}
+
+message SyncLog {
+	repeated TkvRequest tr = 1;
+	required uint32 term   = 2;
+	required uint32 index  = 3;
+}
+
+message ClusterRequest {
+	required RequestType type = 1;
+	optional ClusterVote vote = 2;
+	optional SyncLog     slog = 3;
+}
+
+message ClusterResponse {
+	required ResponseType type = 1;
+	optional SyncLog   log_res = 2;
+}
+
+// /usr/local/protobuf/bin/protoc --cpp_out=./ request.proto
